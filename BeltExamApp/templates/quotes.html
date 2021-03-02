@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes</title>
+    <style>
+        .quoteBox{
+            border: 1px solid black;
+            background-color: beige;
+            height: 50px;
+            
+        }
+    </style>
+</head>
+<body>
+    <h3>Successfully registered/logged in</h3>
+    <h5>Hello {{loggedInUser.first_name}}</h5>
+    <a href="/logout">Log out</a>
+    <a href="/edit/myaccount/{{loggedInUser.id}}">Edit My account</a>
+
+    <h3>Add a Quote</h3>
+    {% if messages %}
+        {% for message in messages %}
+        <p>{{message}}</p>
+        {% endfor %}
+    {% endif %}
+    <form action="/addQuote" method="POST">
+        {% csrf_token %}
+        <h5>Author: <input type="text" name="author"></h5>
+        <h5>Quote: <textarea name="quote" cols="30" rows="10"></textarea></h5>
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>All Quotes</h2>
+    <ul>
+    {% for quote in quotes %}
+    <div class="quoteBox">
+
+        <p>{{quote.author}} -- "{{quote.actual_quote}}" | Posted by: <a href="/user/{{quote.posted_by.id}}">{{quote.posted_by.first_name}} {{quote.posted_by.last_name}}</a>
+        </p>
+        {% if loggedInUser not in quote.users_who_like.all %}
+        <p><a href="/likeQuote/{{quote.id}}">Like</a></p>
+        {% endif %}
+        <p>
+        {% if loggedInUser == quote.posted_by %}
+            <a href="/delete/{{quote.id}}">delete</a>
+        {% endif %}</p>
+        <p>Like(s): {{quote.users_who_like.all.count}}</p>
+        {% endfor %}
+    </ul>
+    </div>
+    <br>
+    <br>
+</body>
+</html>

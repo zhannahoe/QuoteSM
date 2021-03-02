@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit my account</title>
+</head>
+<body>
+    <h2>Edit my Account</h2>
+    <form action="/edit/{{users.id}}" method="POST">
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{message}}</p>
+            {% endfor %}
+        {% endif %}
+        {% csrf_token %}
+            <h4>First Name: <input type="text" name="first_name" value="{{users.first_name}}"></h4>
+            <h4>Last Name: <input type="text" name="last_name" value="{{users.last_name}}"></h4>
+            <h4>Email: <input type="text" name="email" value="{{users.email}}"></h4>
+            <input type="submit" value="Update">
+    </form>
+
+    <a href="/quotes">Back to quotes page</a>
+</body>
+</html>
